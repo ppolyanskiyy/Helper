@@ -12,8 +12,10 @@ ReturnType applyParams(Params&& params, ReturnType(*function)(Args...))
 }
 
 
+
+// concatenate variadic number of parameters by delimeter
 template< typename ... Args >
-std::string concatenateByDelimeter(const std::string delimeter, Args const& ... args)
+std::string concatenateByDelimeter(char delimeter, Args const& ... args)
 {
     std::ostringstream stream;
     using List = int[];
@@ -28,4 +30,20 @@ std::string concatenateByDelimeter(const std::string delimeter, Args const& ... 
     };
 
     return stream.str();
+}
+
+
+
+// split string by delimeter into vector
+std::vector<std::string> split(const std::string& stringToSplit, char delimeter)
+{
+    std::vector<std::string> elements;
+    std::stringstream stringStream(stringToSplit);
+    std::string item;
+
+    while (std::getline(stringStream, item, delimeter))
+    {
+        elements.push_back(item);
+    }
+    return elements;
 }
