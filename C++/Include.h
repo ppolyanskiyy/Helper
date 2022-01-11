@@ -1,3 +1,10 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <memory>
+
+
 // unpack vector of any into function parameters
 template<class Params, class ReturnType, class... Args, std::size_t... Indices>
 ReturnType applyParams(Params&& params, ReturnType(*callback)(Args...), std::index_sequence<Indices...>)
@@ -47,3 +54,22 @@ std::vector<std::string> split(const std::string& stringToSplit, char delimeter)
     }
     return elements;
 }
+
+
+
+
+// basic shrink-wrapped pimpl helper class
+template<typename T> class pimpl
+{
+    std::unique_ptr<T> impl;
+
+public:
+    pimpl() : impl{ new T{} } {}
+    template <typename ...Args>
+    pimpl(Args&& ...args) : impl{ std::forward<Args>(args)... } {}
+
+    ~pimpl() = default;
+
+    T* operator-> () { return impl.get(); }
+    T& operator* () { return *impl.get(); }
+};
